@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>XML to JSON Converter</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .container {
+            display: flex;
+        }
+        .editor {
+            flex: 1;
+            margin: 5px;
+        }
+        .jsonOutput {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            overflow: auto;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>XML to JSON Converter</h1>
+    <div class="container">
+        <div class="editor">
+            <h3>XML Editor</h3>
+            <textarea id="xmlInput" style="width:100%; height:300px;"></textarea>
+            <br>
+            <button onclick="convertXmlToJson()">Convert</button>
+        </div>
+        <div class="editor">
+            <h3>JSON Output</h3>
+            <pre id="jsonOutput" class="jsonOutput"></pre>
+            <p id="errorMessage" class="error"></p>
+        </div>
+    </div>
+
+    <script>
+        function convertXmlToJson() {
+            var xmlData = $('#xmlInput').val();
+            $.ajax({
+                type: 'POST',
+                url: '/convert',
+                data: {'xml_data': xmlData},
+                success: function(response) {
+                    $('#jsonOutput').text(JSON.stringify(response, null, 4));
+                    $('#errorMessage').text('');
+                },
+                error: function(xhr, status, error) {
+                    $('#errorMessage').text('Error: ' + xhr.responseText);
+                    $('#jsonOutput').text('');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
